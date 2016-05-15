@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 //All notes are in the 4th octave unless noted
 //0 = C = 261 Hz
 //1 = D = 294 Hz
@@ -63,10 +65,12 @@ int instrument(int t, int note, int priority, int octaveShift, int keyShift) {
 	return frequency(t, freq, priority);
 }
 
-int _frequency(int t, int internalFrequency, int priority) {
-	return (((t * internalFrequency) / 8000) % 256) / (priority > 0 ? priority : 1);
-}
-
+//FIX: STARTING AT T = 18505, THERE IS A STRANGE BUZZING NOISE AND WEIRD CHARACTERS OUTPUTTED
+//I NEED SLEEP BECAUSE THE REASON IS PROBABLY VERY OBVIOUS
+//yeah it was obvious the int is overflowing kill me
+//i guess when t goes negative it makes the sound of the spawn of satan
+//gotta check and make sure the t is positive because
+//honestly fuck ints right now
 int frequency(int t, int hertz, int priority) {
-	return _frequency(t, (256 * hertz), priority);
+	return (((256 * (unsigned int)t * hertz) / 8000) % 256) / (priority > 0 ? priority : 1);
 }
