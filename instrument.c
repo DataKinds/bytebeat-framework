@@ -64,7 +64,7 @@ int instrument(int t, int note, int priority, int octaveShift, int keyShift) {
 }
 
 int _frequency(int t, int internalFrequency, int priority) {
-	return (t * internalFrequency) / ((priority > 0 ? priority : 1) * 8000);
+	return (((t * internalFrequency) / 8000) % 256) / (priority > 0 ? priority : 1);
 }
 
 int frequency(int t, int hertz, int priority) {
