@@ -6,16 +6,63 @@
 //4 = G = 392 Hz
 //5 = A = 440 Hz
 //6 = B = 494 Hz
-//7 = C5 = 523 Hz
 
-int instrument(int t, int note, int volume) {
-	return t;
+int instrument(int t, int note, int priority, int octaveShift, int keyShift) {
+	int freq = 0;
+	switch(note) {
+		case 0:
+		freq = 261;
+		break;
+		case 1:
+		freq = 294;
+		break;
+		case 2:
+		freq = 330;
+		break;
+		case 3:
+		freq = 349;
+		break;
+		case 4:
+		freq = 392;
+		break;
+		case 5:
+		freq = 440;
+		break;
+		case 6:
+		freq = 494;
+		break;
+	}
+	if(octaveShift < 0) {
+		int i;
+		for(i = 0; i > octaveShift; i--) {
+			freq /= 2;
+		}
+	} else if(octaveShift > 0) {
+		int i;
+		for(i = 0; i < octaveShift; i++) {
+			freq *= 2;
+		}
+	}
+	if(keyShift < 0) {
+		int i;
+		for(i = 0; i > keyShift; i--) {
+			freq *= 94387;
+			freq /= 100000;
+		}
+	} else if(keyShift > 0) {
+		int i;
+		for(i = 0; i < keyShift; i++) {
+			freq *= 105946;
+			freq /= 100000;
+		}
+	}
+	return frequency(t, freq, priority);
+}
+
+int _frequency(int t, int internalFrequency, int priority) {
+	return (t * internalFrequency) / ((priority > 0 ? priority : 1) * 8000);
 }
 
 int frequency(int t, int hertz, int priority) {
-	return _frequency(t, (256 * hertz) / 8000, 10000, priority);
-}
-
-int _frequency(int t, int frequency, int frequencyDivisor, int priority) {
-	return (((t * frequency) / frequencyDivisor) % 256) / (priority > 0 ? priority : 1);
+	return _frequency(t, (256 * hertz), priority);
 }
