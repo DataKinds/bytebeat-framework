@@ -6,14 +6,14 @@
 //4 = G = 392 Hz
 //5 = A = 440 Hz
 //6 = B = 494 Hz
-//7 = C_5 = 523 Hz
+//7 = C5 = 523 Hz
 
 int instrument(int t, int note, int volume) {
 	return t;
 }
 
 int frequency(int t, int hertz, int priority) {
-	
+	return _frequency(t, (256 * hertz) / 8000, 10000, priority);
 }
 
 int _frequency(int t, int frequency, int frequencyDivisor, int priority) {
