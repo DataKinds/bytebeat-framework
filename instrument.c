@@ -6,6 +6,7 @@
 //4 = G = 392 Hz
 //5 = A = 440 Hz
 //6 = B = 494 Hz
+//7 = C5 = 523 Hz
 
 int instrument(int t, int note, int priority, int octaveShift, int keyShift) {
 	int freq = 0;
@@ -30,6 +31,9 @@ int instrument(int t, int note, int priority, int octaveShift, int keyShift) {
 		break;
 		case 6:
 		freq = 494;
+		break;
+		case 7:
+		freq = 523;
 		break;
 	}
 	if(octaveShift < 0) {
