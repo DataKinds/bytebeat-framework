@@ -60,7 +60,7 @@ if options[:willRun]
 	puts "./#{options[:outputFile]} | aplay"
 	puts `./#{options[:outputFile]} | aplay`
 end
-#__END__
+__END__
 #include "c/instrument.c"
 int main() {
 	unsigned int t = 0;
