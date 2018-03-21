@@ -38,7 +38,7 @@ end.parse!
 # this may or may not be empty. if it's empty, handle it later
 options[:inputFile] = ARGV[0]
 
-tempFileName = "~#{options[:outputFile].split(?.).first}.c"
+tempFileName = "~#{options[:outputFile].split(?.).first.split(?/).last}.c"
 
 music = ""
 # handle an empty input file
@@ -56,13 +56,19 @@ File.open(tempFileName, "w") do |tempFile|
 	if options[:noInstrument]
 		processedC = processedC.split(?\n)[1..-1].join(?\n)
 	end
-	tempFile.write()
+	tempFile.write processedC
 end
-# and compile the C file
-puts `#{options[:defaultCompiler]} "#{tempFileName}" -o "#{options[:outputFile]}"`
+# and compile the C file(s)
+if options[:noInstrument]
+	puts "#{options[:defaultCompiler]} \"#{tempFileName}\" -o \"#{options[:outputFile]}\""
+	puts `#{options[:defaultCompiler]} "#{tempFileName}" -o "#{options[:outputFile]}"`
+else
+	puts "#{options[:defaultCompiler]} \"#{tempFileName}\" c/instrument.c -o \"#{options[:outputFile]}\""
+	puts `#{options[:defaultCompiler]} "#{tempFileName}" c/instrument.c -o "#{options[:outputFile]}"`
+end
 # delete the C file if the user wants us to
 unless options[:keepTemp]
-	`rm "~temp.c"`
+	`rm "#{tempFileName}"`
 end
 # then run the output file if the user wants us to
 if options[:willRun]
@@ -72,7 +78,8 @@ if options[:willRun]
 	puts `./#{options[:outputFile]} | aplay`
 end
 __END__
-#include "c/instrument.c"
+#include <stdio.h>
+#include "c/instrument.h"
 int main() {
 	unsigned int t = 0;
 	for(;;t++){

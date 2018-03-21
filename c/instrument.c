@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "instrument.h"
 
 //All notes are in the 4th octave unless noted
 //0 = C = 261 Hz
