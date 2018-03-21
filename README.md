@@ -8,7 +8,7 @@ With `bytebeat.rb` in the same folder as the `c` folder, simply run
 
     bytebeat.rb <music file>
 
-and a `music.out` file will appear in your current directory ready to run. Check out some example `.music` files in the `examples/` folder to see how to create one for yourself.
+and a `music.out` file will appear in your current directory ready to run. Leaving out the music file will pipe input from standard input. Check out some example `.music` files in the `examples/` folder to see how to create one for yourself.
 
 Who's idea was this?
 ---
