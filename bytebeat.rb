@@ -55,6 +55,8 @@ File.open(tempFileName, "w") do |tempFile|
 	processedC = DATA.read.gsub(/REPLACE_ME/, music)
 	if options[:noInstrument]
 		processedC = processedC.split(?\n)[1..-1].join(?\n)
+	else
+		processedC.gsub!(/PATH_TO_INSTRUMENT_HEADER/, "#{File.expand_path(__dir__)}/c/instrument.h")
 	end
 	tempFile.write processedC
 end
@@ -78,8 +80,8 @@ if options[:willRun]
 	puts `./#{options[:outputFile]} | aplay`
 end
 __END__
+#include "PATH_TO_INSTRUMENT_HEADER"
 #include <stdio.h>
-#include "c/instrument.h"
 int main() {
 	unsigned int t = 0;
 	for(;;t++){
