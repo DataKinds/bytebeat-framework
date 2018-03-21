@@ -10,9 +10,9 @@ OptionParser.new do |opts|
 	options[:noInstrument] = false
 
 	opts.banner = "Usage: bytebeat.rb [options] [input file]"
-	opts.seperator "Note: You must have gcc (or a compatible compiler) installed."
-	opts.seperator "      You must have aplay installed to use `-r`."
-	opts.seperator ""
+	opts.separator "Note: You must have gcc (or a compatible compiler) installed."
+	opts.separator "      You must have aplay installed to use `-r`."
+	opts.separator ""
 	opts.on("-o", "--output OUTPUTFILE", "Specify the file to output the compiled binary to (default music.out).") do |out|
 		options[:outputFile] = out
 	end
@@ -35,25 +35,36 @@ OptionParser.new do |opts|
 	end
 end.parse!
 
-if ARGV then
-	# if an input file was supplied after everything was parsed & done
-	options[:inputFile] = ARGV[0]
-end
+# this may or may not be empty. if it's empty, handle it later
+options[:inputFile] = ARGV[0]
+
 tempFileName = "~#{options[:outputFile].split(?.).first}.c"
-File.open(options[:inputFile], "r") do |inputFile|
-	File.open(tempFileName, "w") do |tempFile|
+
+music = ""
+# handle an empty input file
+if options[:inputFile].nil?
+	music = STDIN.read
+else
+# as long as the input file was supplied, read it
+	File.open(options[:inputFile], "r") do |inputFile|
 		music = inputFile.read
-		processedC = DATA.read.gsub(/REPLACE_ME/, music)
-		if options[:noInstrument]
-			processedC = processedC.split(?\n)[1..-1].join(?\n)
-		end
-		tempFile.write()
 	end
 end
+# then generate the temporary C file
+File.open(tempFileName, "w") do |tempFile|
+	processedC = DATA.read.gsub(/REPLACE_ME/, music)
+	if options[:noInstrument]
+		processedC = processedC.split(?\n)[1..-1].join(?\n)
+	end
+	tempFile.write()
+end
+# and compile the C file
 puts `#{options[:defaultCompiler]} "#{tempFileName}" -o "#{options[:outputFile]}"`
+# delete the C file if the user wants us to
 unless options[:keepTemp]
 	`rm "~temp.c"`
 end
+# then run the output file if the user wants us to
 if options[:willRun]
 	puts "chmod +x #{options[:outputFile]}"
 	`chmod +x #{options[:outputFile]}`
