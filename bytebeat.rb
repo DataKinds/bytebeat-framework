@@ -8,6 +8,7 @@ OptionParser.new do |opts|
 	options[:defaultCompiler] = "gcc"
 	options[:keepTemp] = false
 	options[:noInstrument] = false
+	options[:willVisualize] = false
 
 	opts.banner = "Usage: bytebeat.rb [options] [input file]"
 	opts.separator "Note: You must have gcc (or a compatible compiler) installed."
@@ -18,6 +19,10 @@ OptionParser.new do |opts|
 	end
 	opts.on("-r", "--run-aplay", "Run the music file after compilation, using `aplay`.") do
 		options[:willRun] = true
+	end
+	opts.on("-v", "--visualize", "Open the visualizer and show the bytebeat as it plays.") do
+		options[:willRun] = false # this opt overrides willRun
+		options[:willVisualize] = true
 	end
 	opts.on("-c", "--compiler COMPILER", "Specify another compiler to use over `gcc`.") do |compiler|
 		options[:defaultCompiler] = compiler
@@ -72,13 +77,20 @@ end
 unless options[:keepTemp]
 	`rm "#{tempFileName}"`
 end
+
+puts "chmod +x #{options[:outputFile]}"
+`chmod +x #{options[:outputFile]}`
 # then run the output file if the user wants us to
 if options[:willRun]
-	puts "chmod +x #{options[:outputFile]}"
-	`chmod +x #{options[:outputFile]}`
 	puts "./#{options[:outputFile]} | aplay"
 	puts `./#{options[:outputFile]} | aplay`
 end
+if options[:willVisualize]
+	require_relative "visualize.rb"
+	v = Visualizer.new(options[:outputFile])
+	v.mainLoop()
+end
+
 __END__
 #include "PATH_TO_INSTRUMENT_HEADER"
 #include <stdio.h>

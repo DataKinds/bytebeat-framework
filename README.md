@@ -2,6 +2,15 @@ bytebeat-framework
 ===
 A Ruby script to ease the creation of bytebeat music, through special .music files.
 
+Requirements
+---
+* Ruby
+* A `gcc` compatible C compiler.
+If you want the music played for you,
+* `aplay`
+If you want to use the visualizer,
+* `ruby-sdl2` (install using `gem install ruby-sdl2`, along with your system's SDL2 libraries.)
+
 Usage
 ---
 With `bytebeat.rb` in the same folder as the `c` folder, simply run
