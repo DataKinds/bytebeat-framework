@@ -6,10 +6,7 @@ Requirements
 ---
 * Ruby
 * A `gcc` compatible C compiler.
-If you want the music played for you,
-* `aplay`
-If you want to use the visualizer,
-* `ruby-sdl2` (install using `gem install ruby-sdl2`, along with your system's SDL2 libraries.)
+* `aplay` to use the `-r` command line switch.
 
 Usage
 ---
